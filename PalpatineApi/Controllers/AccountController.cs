@@ -318,6 +318,23 @@ namespace PalpatineApi.Controllers
             return logins;
         }
 
+		[AllowAnonymous]
+		[Route("Login")]
+		public async Task<IHttpActionResult> Login(LoginBindingModel model)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+			string errMessage = "User not found";
+			ApplicationUser result = await UserManager.FindByEmailAsync(model.Email);
+			if (result != null)
+			{
+
+				return Ok(result.SecurityStamp);
+			}
+
+			return BadRequest(errMessage);
+		}
+
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
