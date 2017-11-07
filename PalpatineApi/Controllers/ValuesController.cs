@@ -6,12 +6,14 @@ using System.Net.Http;
 using System.Web.Http;
 using System.IdentityModel.Tokens.Jwt;
 using System.ComponentModel.DataAnnotations;
+using PalpatineApi.Attributes;
 
 namespace PalpatineApi.Controllers
 {
     [Authorize]
     public class ValuesController : ApiController
     {
+		[JwtAuthentication]
         // GET api/values
         public IEnumerable<string> Get()
         {

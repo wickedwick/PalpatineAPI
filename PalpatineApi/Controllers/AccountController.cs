@@ -16,25 +16,33 @@ using Microsoft.Owin.Security.OAuth;
 using PalpatineApi.Models;
 using PalpatineApi.Providers;
 using PalpatineApi.Results;
+using PalpatineApi.BusinessLogic;
+using PalpatineApi.BusinessLogic.Base;
+using System.Web.Http.Cors;
 
 namespace PalpatineApi.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/Account")]
+	[EnableCors(origins: "http://localhost:3000,https://localhost:3000,http://localhost:5000,https://localhost:5000", headers: "*", methods: "*")]
+	[RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+		private readonly IAuthenticationBusinessLogic authBll;
 
         public AccountController()
         {
+			this.authBll = new AuthenticationBusinessLogic();
         }
 
         public AccountController(ApplicationUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+            ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
+			IAuthenticationBusinessLogic authBll)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
+			this.authBll = authBll;
         }
 
         public ApplicationUserManager UserManager
@@ -320,41 +328,42 @@ namespace PalpatineApi.Controllers
 
 		[AllowAnonymous]
 		[Route("Login")]
-		public async Task<IHttpActionResult> Login(LoginBindingModel model)
+		public async Task<HttpResponseMessage> Login(LoginBindingModel model)
 		{
+			var response = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
 			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
+				return response;
 			string errMessage = "User not found";
-			ApplicationUser result = await UserManager.FindByEmailAsync(model.Email);
-			if (result != null)
+			var user = await UserManager.FindAsync(model.Email, model.Password);
+			if (user != null)
 			{
-
-				return Ok(result.SecurityStamp);
+				string token = AuthenticationBusinessLogic.GetToken(model.Email);
+				response = Request.CreateResponse(System.Net.HttpStatusCode.OK, token);
 			}
-
-			return BadRequest(errMessage);
+			else
+				response = Request.CreateResponse(System.Net.HttpStatusCode.BadRequest, errMessage);
+			return response;
 		}
 
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<HttpResponseMessage> Register(RegisterBindingModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+			var response = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+			if (!ModelState.IsValid)
+				return response;
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
-
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+			IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return GetErrorResponse(result);
             }
 
-            return Ok();
+			string token = AuthenticationBusinessLogic.GetToken(model.Email);
+			return Request.CreateResponse(System.Net.HttpStatusCode.OK, token);
         }
 
         // POST api/Account/RegisterExternal
@@ -408,7 +417,36 @@ namespace PalpatineApi.Controllers
             get { return Request.GetOwinContext().Authentication; }
         }
 
-        private IHttpActionResult GetErrorResult(IdentityResult result)
+		private HttpResponseMessage GetErrorResponse(IdentityResult result)
+		{
+			if (result == null)
+			{
+				return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+			}
+
+			if (!result.Succeeded)
+			{
+				if (result.Errors != null)
+				{
+					foreach (string error in result.Errors)
+					{
+						ModelState.AddModelError("", error);
+					}
+				}
+
+				if (ModelState.IsValid)
+				{
+					// No ModelState errors are available to send, so just return an empty BadRequest.
+					return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+				}
+
+				return Request.CreateResponse(System.Net.HttpStatusCode.BadRequest, ModelState);
+			}
+
+			return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+		}
+
+		private IHttpActionResult GetErrorResult(IdentityResult result)
         {
             if (result == null)
             {

@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\AuthenticationBusinessLogicTests.cs" />
+    <Compile Include="Controllers\QuoteControllerTest.cs" />
     <Compile Include="Controllers\TokenControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />

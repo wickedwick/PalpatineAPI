@@ -1,17 +1,19 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PalpatineApi.Models;
 using PalpatineApi.BusinessLogic;
 using PalpatineApi.BusinessLogic.Base;
 using Moq;
 using System.Collections.Generic;
+using NUnit;
+using NUnit.Framework;
 
 namespace PalpatineApi.Tests.BusinessLogic
 {
-	[TestClass]
+	[TestFixture]
 	public class AuthenticationBusinessLogicTests
 	{
-		[TestMethod]
+		[Test]
 		public void GetToken_Success()
 		{
 			var username = "twickham@stuff.test";
@@ -19,7 +21,7 @@ namespace PalpatineApi.Tests.BusinessLogic
 			Assert.IsNotNull(result);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetToken_Fail()
 		{
 			var username = "";
@@ -27,7 +29,7 @@ namespace PalpatineApi.Tests.BusinessLogic
 			Assert.IsNull(result);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetPrincipal_Success()
 		{
 			string token = AuthenticationBusinessLogic.GetToken("twickham@stuff.test");
