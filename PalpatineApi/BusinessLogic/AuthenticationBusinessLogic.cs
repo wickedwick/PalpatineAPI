@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Security.Principal;
+using Microsoft.AspNet.Identity;
 
 namespace PalpatineApi.BusinessLogic
 {
@@ -15,14 +16,15 @@ namespace PalpatineApi.BusinessLogic
 	{
 		private const string Secret = "db3OIsj+BXE9NZDy0t8W3TcNekrF+2d/1sFnWG4HnV8TZY30iTOdtVWJG8abWvB1GlOgJuQZdcF2Luqm/hccMw==";
 
-		public string GetTokenInstance(string user)
+		public string GetTokenInstance(ApplicationUser user)
 		{
-			return GetToken(user);
+			var role = "Stormtrooper";
+			return GetToken(user, role);
 		}
 
-		public static string GetToken(string username)
+		public static string GetToken(ApplicationUser user, string role)
 		{
-			if (string.IsNullOrWhiteSpace(username))
+			if (user == null)
 				return null;
 
 			var symmetricKey = Convert.FromBase64String(Secret);
@@ -33,8 +35,8 @@ namespace PalpatineApi.BusinessLogic
 			{
 				Subject = new ClaimsIdentity(new[]
 				{
-					new Claim(ClaimTypes.Name, username)
-					// add role claim here
+					new Claim(ClaimTypes.Name, user.UserName),
+					new Claim(ClaimTypes.Role, role ?? "Stormtrooper")
 				}),
 				Expires = now.AddMinutes(20),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)

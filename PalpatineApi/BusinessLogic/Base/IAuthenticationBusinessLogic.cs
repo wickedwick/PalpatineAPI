@@ -9,6 +9,6 @@ namespace PalpatineApi.BusinessLogic.Base
 {
 	public interface IAuthenticationBusinessLogic
 	{
-		string GetTokenInstance(string username);
+		string GetTokenInstance(ApplicationUser username);
 	}
 }
