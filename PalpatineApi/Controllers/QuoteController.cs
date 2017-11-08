@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PalpatineApi.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -19,7 +20,16 @@ namespace PalpatineApi.Controllers
 		[Route("random")]
 		public string Get()
 		{
-			var quote = "The impediment to action advances action. What stands in the way becomes the way";
+			var quote = "The impediment to action advances action. What stands in the way becomes the way.";
+			return quote;
+		}
+
+		[JwtAuthentication]
+		[HttpGet]
+		[Route("secret")]
+		public string AuthorizedGet()
+		{
+			var quote = "Everything we hear is an opinion, not a fact. Everything we see is a perspective, not the truth.";
 			return quote;
 		}
     }

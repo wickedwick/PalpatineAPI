@@ -13,12 +13,21 @@ namespace PalpatineApi.Tests.Controllers
 	public class QuoteControllerTest
 	{
 		[TestMethod]
-		public void TestIndex()
+		public void TestGet()
 		{
 			var systemUnderTest = new QuoteController();
 			var result = systemUnderTest.Get();
 
 			Assert.IsFalse(string.IsNullOrWhiteSpace(result));
+		}
+
+		[TestMethod]
+		public void TestAuthorizedGet()
+		{
+			var systemUnderTest = new QuoteController();
+			var result = systemUnderTest.AuthorizedGet();
+
+			Assert.IsNotNull(result);
 		}
 	}
 }

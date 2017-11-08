@@ -11,11 +11,13 @@ using System.Web.Http.Filters;
 using PalpatineApi.BusinessLogic;
 using System.Web.Http;
 using System.Net;
+using System.Security.Claims;
 
 namespace PalpatineApi.Attributes
 {
 	public class JwtAuthenticationAttribute : Attribute, IAuthenticationFilter
 	{
+		public string Realm { get; set; }
 		public bool AllowMultiple
 		{
 			get
@@ -50,7 +52,18 @@ namespace PalpatineApi.Attributes
 
 		public Task ChallengeAsync(HttpAuthenticationChallengeContext context, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			Challenge(context);
+			return Task.FromResult(0);
+		}
+
+		private void Challenge(HttpAuthenticationChallengeContext context)
+		{
+			string parameter = null;
+
+			if (!string.IsNullOrEmpty(Realm))
+				parameter = "realm=\"" + Realm + "\"";
+
+			context.ChallengeWith("Bearer", parameter);
 		}
 	}
 

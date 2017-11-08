@@ -59,7 +59,7 @@ namespace PalpatineApi.BusinessLogic
 
 				var validationParameters = new TokenValidationParameters()
 				{
-					RequireExpirationTime = true,
+					RequireExpirationTime = false,
 					ValidateIssuer = false,
 					ValidateAudience = false,
 					IssuerSigningKey = new SymmetricSecurityKey(symmetricKey)
@@ -70,7 +70,7 @@ namespace PalpatineApi.BusinessLogic
 
 				return principal;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				return null;
 			}
@@ -81,6 +81,7 @@ namespace PalpatineApi.BusinessLogic
 			username = null;
 
 			var simplePrinciple = GetPrincipal(token).Result;
+			if (simplePrinciple == null) return false;
 			var identity = simplePrinciple.Identity as ClaimsIdentity;
 
 			if (identity == null)
@@ -112,7 +113,6 @@ namespace PalpatineApi.BusinessLogic
 				using (ApplicationDbContext ctx = new ApplicationDbContext())
 				{
 					userFromDb = ctx.Users.Where(u => u.UserName == username).FirstOrDefault();
-					role = ctx.Roles.Where(r => r.Users == userFromDb).FirstOrDefault().Name;
 				}
 
 				if (userFromDb == null)
