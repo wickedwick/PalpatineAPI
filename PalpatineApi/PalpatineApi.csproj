@@ -100,6 +100,7 @@
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.1.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
       <Private>True</Private>
@@ -268,11 +269,27 @@
     <Compile Include="Attributes\JwtAuthenticationAttribute.cs" />
     <Compile Include="BusinessLogic\AuthenticationBusinessLogic.cs" />
     <Compile Include="BusinessLogic\Base\IAuthenticationBusinessLogic.cs" />
+    <Compile Include="BusinessLogic\Base\IGalleryBusinessLogic.cs" />
+    <Compile Include="BusinessLogic\Base\IImageBusinessLogic.cs" />
+    <Compile Include="BusinessLogic\Base\IUserInfoBusinessLogic.cs" />
+    <Compile Include="BusinessLogic\GalleryBusinessLogic.cs" />
+    <Compile Include="BusinessLogic\ImageBusinessLogic.cs" />
+    <Compile Include="BusinessLogic\UserInfoBusinessLogic.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\GalleryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuoteController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
+    <Compile Include="Controllers\UserInfoController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DataAccess\Base\IGalleryDataAccess.cs" />
+    <Compile Include="DataAccess\Base\IImageDataAccess.cs" />
+    <Compile Include="DataAccess\Base\ITagDataAccess.cs" />
+    <Compile Include="DataAccess\Base\IUserInfoDataAccess.cs" />
+    <Compile Include="DataAccess\GalleryDataAccess.cs" />
+    <Compile Include="DataAccess\ImageDataAccess.cs" />
+    <Compile Include="DataAccess\TagDataAccess.cs" />
+    <Compile Include="DataAccess\UserInfoDataAccess.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -280,10 +297,42 @@
     <Compile Include="Migrations\201710180059261_Initial_Migration.Designer.cs">
       <DependentUpon>201710180059261_Initial_Migration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711092348184_AddUserData.cs" />
+    <Compile Include="Migrations\201711092348184_AddUserData.Designer.cs">
+      <DependentUpon>201711092348184_AddUserData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711100004542_AddUserDataTable.cs" />
+    <Compile Include="Migrations\201711100004542_AddUserDataTable.Designer.cs">
+      <DependentUpon>201711100004542_AddUserDataTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711100013148_AddUserDataToPalpatineData.cs" />
+    <Compile Include="Migrations\201711100013148_AddUserDataToPalpatineData.Designer.cs">
+      <DependentUpon>201711100013148_AddUserDataToPalpatineData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\PalpatineData\201711100027138_InitialDatabaseCreation.cs" />
+    <Compile Include="Migrations\PalpatineData\201711100027138_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201711100027138_InitialDatabaseCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\PalpatineData\201711100205545_Add FK to AspNetUser.cs" />
+    <Compile Include="Migrations\PalpatineData\201711100205545_Add FK to AspNetUser.Designer.cs">
+      <DependentUpon>201711100205545_Add FK to AspNetUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\PalpatineData\201712041811152_AddGalleryImageAndTag.cs" />
+    <Compile Include="Migrations\PalpatineData\201712041811152_AddGalleryImageAndTag.Designer.cs">
+      <DependentUpon>201712041811152_AddGalleryImageAndTag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\PalpatineData\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Gallery.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Image.cs" />
+    <Compile Include="Models\PalpatineData.cs" />
+    <Compile Include="Models\Tag.cs" />
+    <Compile Include="Models\UserData.cs" />
+    <Compile Include="Models\UserViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -366,6 +415,24 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201710180059261_Initial_Migration.resx">
       <DependentUpon>201710180059261_Initial_Migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711092348184_AddUserData.resx">
+      <DependentUpon>201711092348184_AddUserData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711100004542_AddUserDataTable.resx">
+      <DependentUpon>201711100004542_AddUserDataTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711100013148_AddUserDataToPalpatineData.resx">
+      <DependentUpon>201711100013148_AddUserDataToPalpatineData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\PalpatineData\201711100027138_InitialDatabaseCreation.resx">
+      <DependentUpon>201711100027138_InitialDatabaseCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\PalpatineData\201711100205545_Add FK to AspNetUser.resx">
+      <DependentUpon>201711100205545_Add FK to AspNetUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\PalpatineData\201712041811152_AddGalleryImageAndTag.resx">
+      <DependentUpon>201712041811152_AddGalleryImageAndTag.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
