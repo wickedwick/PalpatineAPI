@@ -26,11 +26,7 @@ namespace PalpatineApi.BusinessLogic
 
 		public async Task<bool> AddImageToGallery(Image image, int galleryId)
 		{
-			Gallery gallery = await GetGalleryById(galleryId);
-			if (gallery == null) { return galse; }
-
-			gallery.Images.Add(image);
-			//UpdateGallery(gallery);
+			return await GalleryDal.AddImageToGallery(image, galleryId);
 		}
 
 		public async Task<bool> CreateGallery(string galleryName)
@@ -57,9 +53,11 @@ namespace PalpatineApi.BusinessLogic
 			return gallery;
 		}
 
-		public Task<bool> UpdateGallery(int id, string galleryName)
+		public async Task<bool> UpdateGallery(int id, string galleryName)
 		{
-			throw new NotImplementedException();
+			Gallery gallery = await GalleryDal.GetGalleryById(id);
+			gallery.GalleryName = galleryName;
+			return await GalleryDal.UpdateGallery(gallery);
 		}
 	}
 }

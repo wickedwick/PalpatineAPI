@@ -61,10 +61,11 @@ namespace PalpatineApi.BusinessLogic
 
 				var validationParameters = new TokenValidationParameters()
 				{
-					RequireExpirationTime = false,
+					RequireExpirationTime = true,
 					ValidateIssuer = false,
 					ValidateAudience = false,
-					IssuerSigningKey = new SymmetricSecurityKey(symmetricKey)
+					IssuerSigningKey = new SymmetricSecurityKey(symmetricKey),
+					ValidateLifetime = true
 				};
 
 				SecurityToken securityToken;
@@ -99,6 +100,7 @@ namespace PalpatineApi.BusinessLogic
 				return false;
 
 			// More validation to check whether username exists in system
+			
 
 			return true;
 		}

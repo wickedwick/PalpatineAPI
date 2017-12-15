@@ -75,9 +75,23 @@ namespace PalpatineApi.DataAccess
 			return gallery;
 		}
 
-		public Task<bool> UpdateGallery()
+		public async Task<bool> UpdateGallery(Gallery gallery)
 		{
-			throw new NotImplementedException();
+			bool retVal = false;
+			try
+			{
+				using (PalpatineData ctx = new PalpatineData())
+				{
+					ctx.Entry(gallery).State = System.Data.Entity.EntityState.Modified;
+					await ctx.SaveChangesAsync();
+				}
+				retVal = true;
+			}
+			catch (Exception ex)
+			{
+				retVal = false;
+			}
+			return retVal;
 		}
 	}
 }

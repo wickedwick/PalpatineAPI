@@ -41,8 +41,9 @@ namespace PalpatineApi.Controllers
         }
 
         // PUT: api/Gallery/5
-        public void Put(int id, [FromBody]string value)
+        public async void Put(int id, [FromBody]string value)
         {
+			await GalleryBll.UpdateGallery(id, value);
         }
 
         // DELETE: api/Gallery/5
