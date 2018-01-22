@@ -18,5 +18,7 @@ namespace PalpatineApi.BusinessLogic.Base
 		Task<bool> DeleteGallery(int id);
 
 		Task<bool> AddImageToGallery(Image image, int galleryId);
+
+		Task<Gallery> GetGalleryByName(string galleryName);
 	}
 }

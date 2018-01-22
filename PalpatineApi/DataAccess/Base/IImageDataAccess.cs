@@ -16,5 +16,7 @@ namespace PalpatineApi.DataAccess.Base
 		Task<bool> UpdateImage(int id, string source, string thumbnail, int thumbnailHeight, int thumbnailWidth, string caption, bool isSelected);
 
 		Task<bool> DeleteImage(int id);
+
+		Task<List<Image>> GetImages(int galleryId);
 	}
 }

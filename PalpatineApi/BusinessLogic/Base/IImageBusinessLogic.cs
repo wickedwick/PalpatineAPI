@@ -16,5 +16,12 @@ namespace PalpatineApi.BusinessLogic.Base
 		Task<bool> UpdateImage(int id, string source, string thumbnail, int thumbnailHeight, int thumbnailWidth, string caption, bool isSelected);
 
 		Task<bool> DeleteImage(int id);
+
+		/// <summary>
+		/// Gets all images associated with a gallery.
+		/// </summary>
+		/// <param name="galleryId">The ID of the gallery.</param>
+		/// <returns>List of Image objects.</returns>
+		Task<List<Image>> GetGalleryImages(int galleryId);
 	}
 }

@@ -82,5 +82,22 @@ namespace PalpatineApi.Tests.BusinessLogic
 			Assert.IsNotNull(result);
 			Assert.IsFalse(result);
 		}
+
+		[TestMethod]
+		public void TestGetGalleryByName()
+		{
+			var galleryName = "Test";
+			Gallery testGallery = new Gallery
+			{
+				Id = 1,
+				GalleryName = "Test"
+			};
+			GalleryDal = new Mock<IGalleryDataAccess>();
+			GalleryDal.Setup(x => x.GetGalleryByName(It.IsAny<string>())).Returns(Task.FromResult(testGallery));
+			var systemUnderTest = new GalleryBusinessLogic(GalleryDal.Object);
+			var result = systemUnderTest.GetGalleryByName(galleryName).Result;
+
+			Assert.AreEqual(galleryName, result.GalleryName);
+		}
 	}
 }

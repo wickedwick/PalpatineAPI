@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PalpatineApi.BusinessLogic
 {
-	public class ImageBusinessLogic : IImageDataAccess
+	public class ImageBusinessLogic : Base.IImageBusinessLogic
 	{
 		private readonly IImageDataAccess ImageDal;
 
@@ -41,6 +41,11 @@ namespace PalpatineApi.BusinessLogic
 		public Task<bool> UpdateImage(int id, string source, string thumbnail, int thumbnailHeight, int thumbnailWidth, string caption, bool isSelected)
 		{
 			throw new NotImplementedException();
+		}
+
+		public async Task<List<Image>> GetGalleryImages(int galleryId)
+		{
+			return await ImageDal.GetImages(galleryId);
 		}
 	}
 }

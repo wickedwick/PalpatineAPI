@@ -59,5 +59,10 @@ namespace PalpatineApi.BusinessLogic
 			gallery.GalleryName = galleryName;
 			return await GalleryDal.UpdateGallery(gallery);
 		}
+
+		public async Task<Gallery> GetGalleryByName(string galleryName)
+		{
+			return await GalleryDal.GetGalleryByName(galleryName);
+		}
 	}
 }

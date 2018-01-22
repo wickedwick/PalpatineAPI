@@ -20,6 +20,13 @@ namespace PalpatineApi.DataAccess.Base
 		Task<Gallery> GetGalleryById(int id);
 
 		/// <summary>
+		/// Returns the Gallery given it's name -- soon will have an attribute to check client info from headers.
+		/// </summary>
+		/// <param name="galleryName">The name of the gallery</param>
+		/// <returns>The Gallery object with images.</returns>
+		Task<Gallery> GetGalleryByName(string galleryName);
+
+		/// <summary>
 		/// Creates a new gallery.
 		/// </summary>
 		/// <param name="gallery">The gallery object from the BLL.</param>

@@ -56,6 +56,25 @@ namespace PalpatineApi.DataAccess
 			return retVal;
 		}
 
+		public async Task<Gallery> GetGalleryByName(string galleryName) // and soon client id
+		{
+			Gallery gallery = null;
+
+			try
+			{
+				using (PalpatineData ctx = new PalpatineData())
+				{
+					gallery = ctx.Gallery.Include("Images").Include("Images.Tags").Where(g => g.GalleryName == galleryName).FirstOrDefault();
+				}
+			}
+			catch (Exception ex)
+			{
+
+			}
+
+			return gallery;
+		}
+
 		public async Task<Gallery> GetGalleryById(int id)
 		{
 			Gallery gallery = null;

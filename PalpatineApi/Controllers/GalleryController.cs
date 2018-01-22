@@ -8,17 +8,28 @@ using System.Web.Http;
 using PalpatineApi.BusinessLogic;
 using PalpatineApi.BusinessLogic.Base;
 using PalpatineApi.Models;
+using System.Web.Http.Cors;
 
 namespace PalpatineApi.Controllers
 {
-    public class GalleryController : ApiController
+	[Authorize]
+	[EnableCors(origins: "http://localhost:3000,https://localhost:3000,http://localhost:5000,https://localhost:5000", headers: "*", methods: "*")]
+	[RoutePrefix("api/Gallery")]
+	public class GalleryController : ApiController
     {
 		private readonly IGalleryBusinessLogic GalleryBll;
 		private readonly IImageBusinessLogic ImageBll;
 
+		public GalleryController(IGalleryBusinessLogic galleryBll, IImageBusinessLogic imageBll)
+		{
+			GalleryBll = galleryBll;
+			ImageBll = imageBll;
+		}
+
 		public GalleryController()
 		{
 			GalleryBll = new GalleryBusinessLogic();
+			ImageBll = new ImageBusinessLogic();
 		}
 
         // GET: api/Gallery
@@ -34,6 +45,15 @@ namespace PalpatineApi.Controllers
 			return gallery;
         }
 
+		[AllowAnonymous]
+		[HttpGet]
+		[Route("GetImagesByGalleryName")]
+		public async Task<List<Image>> GetImagesByGalleryName(string galleryName)
+		{
+			Gallery gallery = await GalleryBll.GetGalleryByName(galleryName);
+			return (gallery == null || gallery.Images == null) ? new List<Image>() : gallery.Images;
+		}
+		
         // POST: api/Gallery
         public async Task<bool> Post([FromBody]string galleryName)
         {
