@@ -335,10 +335,10 @@ namespace PalpatineApi.Controllers
 				return response;
 			string errMessage = "User not found";
 			var user = await UserManager.FindAsync(model.Email, model.Password);
-			var roles = await UserManager.GetRolesAsync(user.Id);
 			if (user != null)
 			{
-				string token = AuthenticationBusinessLogic.GetToken(user, roles[0]);
+				var roles = await UserManager.GetRolesAsync(user.Id);
+				var token = AuthenticationBusinessLogic.GetToken(user, roles[0]);
 				response = Request.CreateResponse(System.Net.HttpStatusCode.OK, token);
 			}
 			else
@@ -357,13 +357,13 @@ namespace PalpatineApi.Controllers
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 			IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-			var roles = await UserManager.GetRolesAsync(user.Id);
+			
             if (!result.Succeeded)
             {
                 return GetErrorResponse(result);
             }
 
-			string token = AuthenticationBusinessLogic.GetToken(user, roles[0]);
+			string token = AuthenticationBusinessLogic.GetToken(user, "Stormtrooper");
 			return Request.CreateResponse(System.Net.HttpStatusCode.OK, token);
         }
 
