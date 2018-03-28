@@ -23,7 +23,7 @@ using System.Web.Http.Cors;
 namespace PalpatineApi.Controllers
 {
     [Authorize]
-	[EnableCors(origins: "http://localhost:3000,https://localhost:3000,http://localhost:5000,https://localhost:5000", headers: "*", methods: "*")]
+	[EnableCors(origins: "http://localhost:8080,https://localhost:8080,http://localhost:3000,https://localhost:3000,http://localhost:5000,https://localhost:5000", headers: "*", methods: "*")]
 	[RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -339,7 +339,20 @@ namespace PalpatineApi.Controllers
 			{
 				var roles = await UserManager.GetRolesAsync(user.Id);
 				var token = AuthenticationBusinessLogic.GetToken(user, roles[0]);
-				response = Request.CreateResponse(System.Net.HttpStatusCode.OK, token);
+				// TODO: return in response: id, username, first, last, token -- make DTO for this to serialize as JSON
+				var id = user.Id;
+				var firstName = "Emperor";
+				var lastName = "Palpatine";
+				var json = new
+				{
+					id = id,
+					username = user.UserName,
+					firstName = firstName,
+					lastName = lastName,
+					token = token
+				};
+
+				response = Request.CreateResponse(System.Net.HttpStatusCode.OK, json);
 			}
 			else
 				response = Request.CreateResponse(System.Net.HttpStatusCode.BadRequest, errMessage);

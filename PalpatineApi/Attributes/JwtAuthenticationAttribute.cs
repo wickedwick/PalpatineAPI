@@ -58,7 +58,7 @@ namespace PalpatineApi.Attributes
 
 		private void Challenge(HttpAuthenticationChallengeContext context)
 		{
-			string parameter = null;
+			string parameter = context.Request.Headers.Authorization.Parameter;
 
 			if (!string.IsNullOrEmpty(Realm))
 				parameter = "realm=\"" + Realm + "\"";

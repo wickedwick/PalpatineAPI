@@ -11,7 +11,7 @@ using System.Web.Http.Cors;
 namespace PalpatineApi.Controllers
 {
 	[Authorize]
-	[EnableCors(origins: "http://localhost:3000,https://localhost:3000,http://localhost:5000,https://localhost:5000", headers: "*", methods: "*")]
+	[EnableCors(origins: "http://localhost:8080,https://localhost:8080,http://localhost:3000,https://localhost:3000,http://localhost:5000,https://localhost:5000", headers: "*", methods: "*")]
 	[RoutePrefix("api/Quote")]
 	public class QuoteController : ApiController
     {
