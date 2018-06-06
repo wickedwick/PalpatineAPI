@@ -347,9 +347,9 @@ namespace PalpatineApi.Controllers
 				{
 					id = id,
 					username = user.UserName,
-					firstName = firstName,
-					lastName = lastName,
-					token = token
+					firstName,
+					lastName,
+					token
 				};
 
 				response = Request.CreateResponse(System.Net.HttpStatusCode.OK, json);
